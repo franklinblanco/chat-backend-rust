@@ -1,0 +1,9 @@
+/Users/franklinblanco/Desktop/Code/rust/chat-backend/client/target/debug/deps/futures_channel-245791194c8e8a98.rmeta: /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/lib.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/lock.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/mpsc/mod.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/mpsc/queue.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/oneshot.rs
+
+/Users/franklinblanco/Desktop/Code/rust/chat-backend/client/target/debug/deps/futures_channel-245791194c8e8a98.d: /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/lib.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/lock.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/mpsc/mod.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/mpsc/queue.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/oneshot.rs
+
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/lib.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/lock.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/mpsc/mod.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/mpsc/queue.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/futures-channel-0.3.25/src/oneshot.rs:

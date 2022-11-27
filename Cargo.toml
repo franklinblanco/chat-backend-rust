@@ -1,0 +1,20 @@
+[package]
+name = "chat-backend"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.20.1", features = ["full"] }
+tungstenite = "0.17.3"
+futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+
+dotenv = "0.15.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1" }
+chrono = { version = "0.4", features = [ "serde" ] }
+rand = "0.8.5"
+
+surrealdb-rs = { git = "https://github.com/surrealdb/surrealdb.rs.git" }
+surrealdb = { git = "https://github.com/rushmorem/surrealdb", branch = "suppress-warnings", default-features = false }

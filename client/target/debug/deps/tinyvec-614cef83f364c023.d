@@ -1,0 +1,11 @@
+/Users/franklinblanco/Desktop/Code/rust/chat-backend/client/target/debug/deps/tinyvec-614cef83f364c023.rmeta: /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/lib.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array/generated_impl.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec_drain.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/slicevec.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/tinyvec.rs
+
+/Users/franklinblanco/Desktop/Code/rust/chat-backend/client/target/debug/deps/tinyvec-614cef83f364c023.d: /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/lib.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array/generated_impl.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec_drain.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/slicevec.rs /Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/tinyvec.rs
+
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/lib.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/array/generated_impl.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/arrayvec_drain.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/slicevec.rs:
+/Users/franklinblanco/.cargo/registry/src/github.com-1ecc6299db9ec823/tinyvec-1.6.0/src/tinyvec.rs:
