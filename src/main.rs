@@ -1,5 +1,10 @@
+use routes::start_ws_server;
+
+mod dao;
+mod domain;
 mod routes;
-/// A WebSocket echo server
-fn main () {
-    
+
+#[tokio::main]
+async fn main() {
+    start_ws_server().await;
 }

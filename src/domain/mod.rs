@@ -1,4 +1,5 @@
-pub mod message;
-pub mod user;
-pub mod room;
-pub mod platform;
+pub mod chat_message;
+pub mod chat_room;
+pub mod chat_room_channel;
+pub mod client_message_out;
+pub mod state;

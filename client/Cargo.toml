@@ -12,3 +12,5 @@ futures-util = { version = "0.3", default-features = false, features = ["sink", 
 futures-channel = "0.3"
 hyper = { version = "0.14", default-features = false, features = ["http1", "server", "tcp"] }
 url = "2.0.0"
+
+ws-types = { path = "../../libs/ws-types/" }

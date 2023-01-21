@@ -7,8 +7,11 @@ edition = "2021"
 
 [dependencies]
 tokio = { version = "1.20.1", features = ["full"] }
-tungstenite = "0.17.3"
-futures-util = { version = "0.3", default-features = false, features = ["sink", "std"] }
+axum = { version = "0.6.1", features = ["ws"]}
+sqlx = { version = "0.6.0", features = [ "runtime-tokio-rustls", "mysql", "chrono", "decimal", "offline" ] }
+actix-web = "4"
+futures = "0.3"
+tower = { version = "0.4", features = ["util"] }
 
 dotenv = "0.15.0"
 serde = { version = "1.0", features = ["derive"] }
@@ -16,5 +19,4 @@ serde_json = { version = "1" }
 chrono = { version = "0.4", features = [ "serde" ] }
 rand = "0.8.5"
 
-surrealdb-rs = { git = "https://github.com/surrealdb/surrealdb.rs.git" }
-surrealdb = { git = "https://github.com/rushmorem/surrealdb", branch = "suppress-warnings", default-features = false }
+chat-types = { git = "https://franklinblanco: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@github.com/franklinblanco/chat-types.git" }
