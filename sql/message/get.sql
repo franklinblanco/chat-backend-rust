@@ -1,0 +1,1 @@
+SELECT id, from_id, to_id, message as "message: _", time_sent, time_delivered as "time_delivered: _", time_seen as "time_seen: _" FROM message WHERE id = ?;

@@ -13,6 +13,6 @@ pub struct ChatRoomChannel {
     pub recipient_sockets: broadcast::Sender<String>, // TODO: Evaluate customer & employee (maybe 2 different ones)
     pub participants: Vec<u32>,
     /// El id en la base de datos de este chat room
-    pub chat_room_id: i32, //TODO: replace with chat room domain obj
+    pub chat_room_id: u32, //TODO: replace with chat room domain obj
     pub messages: Vec<ChatMessage>,
 }

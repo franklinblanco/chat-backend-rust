@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS message (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    from_id INT UNSIGNED NOT NULL,
+    to_id INT UNSIGNED NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    time_sent TIMESTAMP NOT NULL,
+    time_delivered VARCHAR(2048) NOT NULL,
+    time_seen VARCHAR(2048) NOT NULL
+);

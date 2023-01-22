@@ -1,12 +1,12 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, env};
 
 use sqlx::MySqlPool;
 
 #[allow(dead_code)]
 pub async fn start_database_connection(
-    env_vars: &HashMap<String, String>,
 ) -> Result<MySqlPool, sqlx::Error> {
-    let db_url = match env_vars.get("DATABASE_URL") {
+    let vars = env::vars().into_iter().collect::<HashMap<String, String>>();
+    let db_url = match vars.get("DATABASE_URL") {
         Some(str) => str,
         None => panic!("DATABASE_URL env var not found"),
     };
@@ -14,7 +14,6 @@ pub async fn start_database_connection(
     sqlx::MySqlPool::connect(&formatted_db_url).await
 }
 #[allow(dead_code)]
-
 pub async fn run_all_migrations(conn: &MySqlPool) {
     match sqlx::migrate!("./migrations").run(conn).await {
         Ok(()) => {
