@@ -20,6 +20,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "actix-cors"
+version = "0.6.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b340e9cfa5b08690aae90fb61beb44e9b06f44fe3d0f93781aaa58cfba86245e"
+dependencies = [
+ "actix-utils",
+ "actix-web",
+ "derive_more",
+ "futures-util",
+ "log",
+ "once_cell",
+ "smallvec",
+]
+
+[[package]]
 name = "actix-http"
 version = "3.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -253,9 +268,9 @@ checksum = "8da52d66c7071e2e3fa2a1e5c6d088fec47b593032b254f5e980de8ea54454d6"
 
 [[package]]
 name = "async-trait"
-version = "0.1.62"
+version = "0.1.63"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "689894c2db1ea643a50834b999abf1c110887402542955ff5451dab8f861f9ed"
+checksum = "eff18d764974428cf3a9328e23fc5c986f5fbed46e6cd4cdf42544df5d297ec1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -279,9 +294,9 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "axum"
-version = "0.6.3"
+version = "0.6.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "678c5130a507ae3a7c797f9a17393c14849300b8440eac47cdb90a5bdcb3a543"
+checksum = "e5694b64066a2459918d8074c2ce0d5a88f409431994c2356617c8ae0c4721fc"
 dependencies = [
  "async-trait",
  "axum-core",
@@ -502,14 +517,18 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 name = "chat-backend"
 version = "0.1.0"
 dependencies = [
+ "actix-cors",
  "actix-web",
+ "actix-web-utils",
  "axum",
- "chat-types",
  "chrono",
  "dev-communicators",
  "dev-dtos",
+ "dev-macros",
  "dotenvy",
+ "err",
  "futures",
+ "openssl",
  "rand",
  "reqwest",
  "serde",
@@ -517,15 +536,6 @@ dependencies = [
  "sqlx",
  "tokio",
  "tower",
-]
-
-[[package]]
-name = "chat-types"
-version = "0.1.0"
-source = "git+https://franklinblanco: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@github.com/franklinblanco/chat-types.git#1b8cd0a46abe4a4b60366c24c0bdb1c60c614fed"
-dependencies = [
- "chrono",
- "serde",
 ]
 
 [[package]]
@@ -749,10 +759,21 @@ dependencies = [
 [[package]]
 name = "dev-dtos"
 version = "0.1.0"
-source = "git+https://github.com/franklinblanco/user-svc-dtos-rust.git#b14726c7e6f788005a6177b3049589508a1263ae"
+source = "git+https://github.com/franklinblanco/user-svc-dtos-rust.git#400f705ead30467cadc96d7aef6a3163f323df45"
 dependencies = [
  "chrono",
  "serde",
+]
+
+[[package]]
+name = "dev-macros"
+version = "0.1.0"
+source = "git+https://github.com/franklinblanco/dev-macros.git#5ef5f486547163bcddfff3a561a23c1135519590"
+dependencies = [
+ "dev-dtos",
+ "serde",
+ "serde_json",
+ "syn",
 ]
 
 [[package]]
@@ -1467,6 +1488,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ff011a302c396a5197692431fc1948019154afc178baf7d8e37367442a4601cf"
 
 [[package]]
+name = "openssl-src"
+version = "111.24.0+1.1.1s"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3498f259dab01178c6228c6b00dcef0ed2a2d5e20d648c017861227773ea4abd"
+dependencies = [
+ "cc",
+]
+
+[[package]]
 name = "openssl-sys"
 version = "0.9.80"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1475,6 +1505,7 @@ dependencies = [
  "autocfg",
  "cc",
  "libc",
+ "openssl-src",
  "pkg-config",
  "vcpkg",
 ]
@@ -1931,9 +1962,9 @@ checksum = "1c107b6f4780854c8b126e228ea8869f4d7b71260f962fefb57b996b8959ba6b"
 
 [[package]]
 name = "security-framework"
-version = "2.8.0"
+version = "2.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "645926f31b250a2dca3c232496c2d898d91036e45ca0e97e0e2390c54e11be36"
+checksum = "7c4437699b6d34972de58652c68b98cb5b53a4199ab126db8e20ec8ded29a721"
 dependencies = [
  "bitflags",
  "core-foundation",

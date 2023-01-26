@@ -21,11 +21,10 @@
             join_btn.addEventListener("click", function(e) {
                 this.disabled = true;
 
-                const websocket = new WebSocket("ws://localhost:3030/v1/chat-socket");
+                const websocket = new WebSocket("ws://127.0.0.1:3000/websocket");
 
                 websocket.onopen = function() {
-                    console.log("connection opened");
-                    websocket.send(username.value);
+                    websocket.send(JSON.stringify({"head": "LOGIN", "body": {"id": "1", "token": "EQfXEWahJqDKWtGMCrFmeK1RME+hETYpezmj8qiguE+5vfJVE8p9TMPwa4m48IO7wA6E3ffkNEIc7Jushuze7A=="}}));
                 }
 
                 const btn = this;
@@ -38,11 +37,12 @@
                 websocket.onmessage = function(e) {
                     console.log("received message: "+e.data);
                     textarea.value += e.data+"\r\n";
+                    
                 }
 
                 input.onkeydown = function(e) {
                     if (e.key == "Enter") {
-                        websocket.send(input.value);
+                        websocket.send(JSON.stringify({"head": "SEND MESSAGE", "body": {"message": {"Text": input.value}, "to": 1}}));
                         input.value = "";
                     }
                 }

@@ -17,5 +17,8 @@ This is a generic backend for all future applications that require a chat. Built
 - Player is free to send/reciveve messages from/to any room he belongs to
 - All room changes must be done by League-svc
 
-
+### White paper?
+- Messages must be loaded when user enters the app. 
+- They should get a list of participants of every chat room they're in.
+- They should have participant metadata stored or request it.
 

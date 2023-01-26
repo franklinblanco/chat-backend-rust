@@ -1,6 +1,9 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{mysql::{MySqlTypeInfo, MySqlValueRef}, MySql};
+use sqlx::{
+    mysql::{MySqlTypeInfo, MySqlValueRef},
+    MySql,
+};
 
 /// Used for Both registering delivered and seen time in messages.
 /// The reasoning for this is that a chatroom can have many users
@@ -14,7 +17,7 @@ pub struct TimeSensitiveAction {
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub struct TimeSensitiveActionVec {
-    pub list: Vec<TimeSensitiveAction>
+    pub list: Vec<TimeSensitiveAction>,
 }
 impl sqlx::Type<MySql> for TimeSensitiveActionVec {
     fn type_info() -> MySqlTypeInfo {
@@ -30,7 +33,7 @@ impl sqlx::Encode<'_, MySql> for TimeSensitiveActionVec {
 impl sqlx::Decode<'_, MySql> for TimeSensitiveActionVec {
     fn decode(value: MySqlValueRef<'_>) -> Result<Self, sqlx::error::BoxDynError> {
         match <&str as sqlx::Decode<MySql>>::decode(value).map(ToOwned::to_owned) {
-            Ok(json_str) => match serde_json::from_str(json_str.as_str()){
+            Ok(json_str) => match serde_json::from_str(json_str.as_str()) {
                 Ok(time_sensitive_action) => Ok(time_sensitive_action),
                 Err(error) => Err(Box::new(error)),
             },
@@ -90,7 +93,7 @@ impl sqlx::Encode<'_, MySql> for ChatMessageContent {
 impl sqlx::Decode<'_, MySql> for ChatMessageContent {
     fn decode(value: MySqlValueRef<'_>) -> Result<Self, sqlx::error::BoxDynError> {
         match <&str as sqlx::Decode<MySql>>::decode(value).map(ToOwned::to_owned) {
-            Ok(json_str) => match serde_json::from_str(json_str.as_str()){
+            Ok(json_str) => match serde_json::from_str(json_str.as_str()) {
                 Ok(time_sensitive_action) => Ok(time_sensitive_action),
                 Err(error) => Err(Box::new(error)),
             },

@@ -2,25 +2,53 @@ use std::{net::SocketAddr, sync::Arc};
 
 use axum::extract::ws::{Message, WebSocket};
 use futures::stream::SplitSink;
+use tokio::{sync::Mutex, task::JoinHandle};
 
 use crate::{
     domain::state::AppState,
-    service::user::{is_addr_registered, register_addr},
+    service::{
+        message::user_send_message,
+        user::{is_addr_registered, register_addr},
+    },
 };
 
-use super::utils::interpret_message;
+use super::utils::{interpret_message, send_message};
 
 pub async fn handle_message(
     message: Message,
-    sender: &mut SplitSink<WebSocket, Message>,
+    sender: Arc<Mutex<SplitSink<WebSocket, Message>>>,
     state: Arc<AppState>,
     addr: SocketAddr,
-) -> Result<(), Box<dyn std::error::Error>> {
-    let client_message_in = interpret_message(message)?;
+    all_send_tasks: &mut Vec<JoinHandle<()>>,
+) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    let client_message_in = match interpret_message(message) {
+        Ok(res) => res,
+        Err(err) => return Err(err),
+    };
 
     let user_id = match is_addr_registered(&state, &addr) {
         Some(user_id) => user_id,
-        None => return register_addr(&state, &addr, sender, &client_message_in).await,
+        None => {
+            return register_addr(&state, &addr, sender, &client_message_in, all_send_tasks).await
+        }
+    };
+
+    match client_message_in {
+        super::recv::ClientMessageIn::Login(_) => {
+            send_message(
+                sender,
+                super::send::ClientMessageOut::Error("Already Logged in!".into()),
+            )
+            .await?
+        }
+        super::recv::ClientMessageIn::Logout => todo!(),
+        super::recv::ClientMessageIn::SeeMessages(_) => todo!(),
+        super::recv::ClientMessageIn::SendMessage(message) => {
+            user_send_message(&state, user_id, message).await?
+        }
+        super::recv::ClientMessageIn::JoinGroup() => todo!(),
+        super::recv::ClientMessageIn::LeaveGroup() => todo!(),
+        super::recv::ClientMessageIn::FetchMessages() => todo!(),
     };
 
     Ok(())
@@ -30,6 +58,12 @@ pub async fn handle_message(
 pub async fn disconnect_client(
     state: &Arc<AppState>,
     addr: &SocketAddr,
-) -> Result<(), Box<dyn std::error::Error>> {
+    send_tasks: Vec<JoinHandle<()>>,
+) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    for send_task in send_tasks {
+        send_task.abort();
+    }
+    let user_id = state.remove_connected_client(addr)?;
+    state.remove_user_from_all_groups(&user_id)?;
     Ok(())
 }

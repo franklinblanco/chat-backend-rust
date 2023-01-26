@@ -1,0 +1,223 @@
+{
+  "db": "MySQL",
+  "22969122740e3c5256d314819b1c3e2a1f5dcd4af963adb7e846242b7f012821": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 4
+      }
+    },
+    "query": "UPDATE chat_room SET \ntitle = ?,\nowner_id = ?,\nlast_updated = ?\nWHERE id = ?;"
+  },
+  "31e6b529e15d68208d93b8f45022c23f62dbbd841efc2920de020dc120e4dcf4": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 547
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "from_id",
+          "ordinal": 1,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4129
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "to_id",
+          "ordinal": 2,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4129
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "message: _",
+          "ordinal": 3,
+          "type_info": {
+            "char_set": 224,
+            "flags": {
+              "bits": 4097
+            },
+            "max_size": 1020,
+            "type": "VarString"
+          }
+        },
+        {
+          "name": "time_sent",
+          "ordinal": 4,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4225
+            },
+            "max_size": 19,
+            "type": "Timestamp"
+          }
+        },
+        {
+          "name": "time_delivered: _",
+          "ordinal": 5,
+          "type_info": {
+            "char_set": 224,
+            "flags": {
+              "bits": 4097
+            },
+            "max_size": 8192,
+            "type": "VarString"
+          }
+        },
+        {
+          "name": "time_seen: _",
+          "ordinal": 6,
+          "type_info": {
+            "char_set": 224,
+            "flags": {
+              "bits": 4097
+            },
+            "max_size": 8192,
+            "type": "VarString"
+          }
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT id, from_id, to_id, message as \"message: _\", time_sent, time_delivered as \"time_delivered: _\", time_seen as \"time_seen: _\" FROM message WHERE id = ?;"
+  },
+  "8d56415b3728d5a77705204ac1fbdedc366b026b91dc0fb565c0ae4c6a2863e4": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 4
+      }
+    },
+    "query": "INSERT INTO chat_room (\n    id,\n    title,\n    owner_id,\n    time_created,\n    last_updated\n) VALUES (\n    NULL, \n    ?,\n    ?,\n    ?,\n    ?\n)"
+  },
+  "a75adecf277c3c8d3b5e66b6f17fa5e01dde87ba4b854e32b930596c2e9498ea": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 547
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "title",
+          "ordinal": 1,
+          "type_info": {
+            "char_set": 224,
+            "flags": {
+              "bits": 4097
+            },
+            "max_size": 1020,
+            "type": "VarString"
+          }
+        },
+        {
+          "name": "owner_id",
+          "ordinal": 2,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4129
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "time_created",
+          "ordinal": 3,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4225
+            },
+            "max_size": 19,
+            "type": "Timestamp"
+          }
+        },
+        {
+          "name": "last_updated",
+          "ordinal": 4,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4225
+            },
+            "max_size": 19,
+            "type": "Timestamp"
+          }
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT * FROM chat_room\nWHERE id = ?;"
+  },
+  "ea8d2b9ed609a48500d78787b15d895c7ebede92fd0312c24522edb86d05b35f": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 3
+      }
+    },
+    "query": "UPDATE message SET \ntime_delivered = ?,\ntime_seen = ?\nWHERE id = ?;"
+  },
+  "fb9f00db77eae0cd2b33bb1ea29305d2d3d848a3fbe24ea704f63daf53a02b15": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 6
+      }
+    },
+    "query": "INSERT INTO message (id, from_id, to_id, message, time_sent, time_delivered, time_seen) VALUES (\n    NULL,\n    ?,\n    ?,\n    ?,\n    ?,\n    ?,\n    ?\n);"
+  }
+}

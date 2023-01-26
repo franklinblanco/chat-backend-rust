@@ -6,7 +6,7 @@ use std::fmt::Display;
 use super::message::ClientMessage;
 
 pub trait Sendable {
-    fn into_message(self) -> Result<ClientMessage, Box<dyn std::error::Error>>;
+    fn into_message(self) -> Result<ClientMessage, Box<dyn std::error::Error + Send + Sync>>;
 }
 
 /// Message that can be sent from this server to a connected socket
@@ -23,6 +23,8 @@ pub enum ClientMessageOut {
     MessageDelivered(MessageTimeChangeUpdate),
     /// Whenever a message sent by the user gets seen along with the MessageId
     MessageSeen(MessageTimeChangeUpdate),
+
+    Error(String),
 }
 /// Used as a dto to notify the client that a specific message has been seen or delivered
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord)]
@@ -42,12 +44,13 @@ impl Display for ClientMessageOut {
             ClientMessageOut::MessageRecieved(_) => write!(f, "MESSAGE RECIEVED"),
             ClientMessageOut::MessageDelivered(_) => write!(f, "MESSAGE DELIVERED"),
             ClientMessageOut::MessageSeen(_) => write!(f, "MESSAGE SEEN"),
+            ClientMessageOut::Error(_) => write!(f, "ERROR"),
         }
     }
 }
 
 impl Sendable for ClientMessageOut {
-    fn into_message(self) -> Result<ClientMessage, Box<(dyn std::error::Error)>> {
+    fn into_message(self) -> Result<ClientMessage, Box<(dyn std::error::Error + Send + Sync)>> {
         let head = self.to_string();
         match self {
             ClientMessageOut::Acknowledge => Ok(ClientMessage {
@@ -73,6 +76,10 @@ impl Sendable for ClientMessageOut {
             ClientMessageOut::MessageSeen(seen_info) => Ok(ClientMessage {
                 head,
                 body: serde_json::to_value(seen_info)?,
+            }),
+            ClientMessageOut::Error(error) => Ok(ClientMessage {
+                head,
+                body: serde_json::to_value(error)?,
             }),
         }
     }

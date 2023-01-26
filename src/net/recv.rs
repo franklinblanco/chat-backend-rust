@@ -8,7 +8,9 @@ use crate::domain::chat_message::ChatMessageSender;
 use super::{error::SocketError, message::ClientMessage};
 
 pub trait Receivable {
-    fn from_message(message: ClientMessage) -> Result<Self, Box<dyn std::error::Error>>
+    fn from_message(
+        message: ClientMessage,
+    ) -> Result<Self, Box<dyn std::error::Error + Send + Sync>>
     where
         Self: Sized;
 }
@@ -23,6 +25,10 @@ pub enum ClientMessageIn {
     SeeMessages(Vec<u128>),
     SendMessage(ChatMessageSender),
 
+    /// Client can send this to server to fetch old messages.
+    /// By Old messages I mean: Messages that have already been delivered/seen
+    FetchMessages(),
+
     JoinGroup(),
     LeaveGroup(),
 }
@@ -36,12 +42,15 @@ impl Display for ClientMessageIn {
             ClientMessageIn::SendMessage(_) => write!(f, "SEND MESSAGE"),
             ClientMessageIn::JoinGroup() => write!(f, "JOIN GROUP"),
             ClientMessageIn::LeaveGroup() => write!(f, "LEAVE GROUP"),
+            ClientMessageIn::FetchMessages() => write!(f, "FETCH MESSAGES"),
         }
     }
 }
 
 impl Receivable for ClientMessageIn {
-    fn from_message(message: ClientMessage) -> Result<Self, Box<dyn std::error::Error>> {
+    fn from_message(
+        message: ClientMessage,
+    ) -> Result<Self, Box<dyn std::error::Error + Send + Sync>> {
         match message.head.as_str() {
             "LOGIN" => Ok(Self::Login(serde_json::from_value(message.body)?)),
             "LOGOUT" => Ok(Self::Logout),
@@ -49,6 +58,7 @@ impl Receivable for ClientMessageIn {
             "SEND MESSAGE" => Ok(Self::SendMessage(serde_json::from_value(message.body)?)),
             "JOIN GROUP" => Ok(Self::JoinGroup()),
             "LEAVE GROUP" => Ok(Self::LeaveGroup()),
+            "FETCH MESSAGES" => Ok(Self::FetchMessages()),
             _ => Err(SocketError::boxed_error(format!(
                 "ClientMessage recieved isn't recognized by the server. ClientMessage: {:#?}",
                 message

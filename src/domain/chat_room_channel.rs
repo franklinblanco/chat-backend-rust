@@ -10,9 +10,22 @@ pub struct ChatRoomChannel {
     /// para recibir los mensajes.
     /// Lo mas importante aqui es que esto sirve para elegir a quien se le va a enviar mensajes.
     /// El Tipo dentro del Sender es lo que se va a enviar a traves de los canales
-    pub recipient_sockets: broadcast::Sender<String>, // TODO: Evaluate customer & employee (maybe 2 different ones)
+    pub recipient_sockets: broadcast::Sender<ChatMessage>,
     pub participants: Vec<u32>,
     /// El id en la base de datos de este chat room
-    pub chat_room_id: u32, //TODO: replace with chat room domain obj
-    pub messages: Vec<ChatMessage>,
+    pub chat_room_id: u32,
+}
+
+impl ChatRoomChannel {
+    pub fn new(
+        sender: broadcast::Sender<ChatMessage>,
+        participants: Vec<u32>,
+        chat_room_id: u32,
+    ) -> Self {
+        Self {
+            recipient_sockets: sender,
+            participants,
+            chat_room_id,
+        }
+    }
 }
