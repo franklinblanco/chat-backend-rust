@@ -113,6 +113,83 @@
     },
     "query": "SELECT id, from_id, to_id, message as \"message: _\", time_sent, time_delivered as \"time_delivered: _\", time_seen as \"time_seen: _\" FROM message WHERE id = ?;"
   },
+  "4cb918ef7d3bab74dc74ef168dfee35d73f06193627d4ab499cf7acfa3ffe10a": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id",
+          "ordinal": 0,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 547
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "title",
+          "ordinal": 1,
+          "type_info": {
+            "char_set": 224,
+            "flags": {
+              "bits": 4097
+            },
+            "max_size": 1020,
+            "type": "VarString"
+          }
+        },
+        {
+          "name": "owner_id",
+          "ordinal": 2,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4129
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "time_created",
+          "ordinal": 3,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4225
+            },
+            "max_size": 19,
+            "type": "Timestamp"
+          }
+        },
+        {
+          "name": "last_updated",
+          "ordinal": 4,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4225
+            },
+            "max_size": 19,
+            "type": "Timestamp"
+          }
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT cr.* FROM chat_room cr\nLEFT JOIN chat_users cu ON cu.chat_room_id = cr.id\nWHERE cu.user_id = ?\nORDER BY cu.time_joined DESC"
+  },
   "8d56415b3728d5a77705204ac1fbdedc366b026b91dc0fb565c0ae4c6a2863e4": {
     "describe": {
       "columns": [],
