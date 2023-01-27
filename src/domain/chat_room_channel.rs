@@ -14,6 +14,7 @@ pub struct ChatRoomChannel {
     pub participants: Vec<u32>,
     /// El id en la base de datos de este chat room
     pub chat_room_id: u32,
+    // TODO: Message queue
 }
 
 impl ChatRoomChannel {
