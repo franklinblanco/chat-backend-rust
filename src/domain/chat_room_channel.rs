@@ -1,6 +1,6 @@
 use tokio::sync::broadcast;
 
-use super::chat_message::{BroadcastMessage};
+use super::chat_message::BroadcastMessage;
 
 #[derive(Debug, Clone)]
 pub struct ChatRoomChannel {

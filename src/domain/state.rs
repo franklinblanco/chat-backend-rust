@@ -5,7 +5,10 @@ use tokio::sync::broadcast::{self, Receiver, Sender};
 
 use crate::net::error::{SocketError, MUTEX_LOCK_ERROR_MESSAGE};
 
-use super::{chat_message::{BroadcastMessage}, chat_room_channel::ChatRoomChannel, chat_message_update::ChatMessageUpdate};
+use super::{
+    chat_message::BroadcastMessage, chat_message_update::ChatMessageUpdate,
+    chat_room_channel::ChatRoomChannel,
+};
 
 const MAX_CONCURRENT_ROOM_CAPACITY: usize = 150;
 
@@ -57,6 +60,9 @@ impl AppState {
         rooms: Vec<u32>,
     ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
         let mut user_rooms = self.user_rooms.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
+        if user_rooms.contains_key(&user_id) {
+            return Err(SocketError::boxed_error("Existing user_rooms was attempted to be replaced by another list of rooms, this usually happens when a user logs in from 2 clients at the same time."));
+        };
         match user_rooms.insert(user_id, rooms) {
             Some(_) => Err(SocketError::boxed_error("Existing user_rooms replaced by another list of rooms, this should NOT be happening. FATAL!")),
             None => Ok(()),
@@ -171,53 +177,73 @@ impl AppState {
         let user_rooms = self.user_rooms.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
         user_rooms.get(user_id).cloned()
     }
-    pub fn does_message_have_updates_in_queue(&self, message_id: &u32, ) -> bool {
-        match self.message_update_queue.lock().expect(MUTEX_LOCK_ERROR_MESSAGE).get(message_id) {
+    pub fn does_message_have_updates_in_queue(&self, message_id: &u32) -> bool {
+        match self
+            .message_update_queue
+            .lock()
+            .expect(MUTEX_LOCK_ERROR_MESSAGE)
+            .get(message_id)
+        {
             Some(_) => true,
             None => false,
         }
     }
     pub fn add_message_update_to_queue(&self, message_id: &u32, update: ChatMessageUpdate) {
-        let mut message_update_queue_lock = self.message_update_queue.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
+        let mut message_update_queue_lock = self
+            .message_update_queue
+            .lock()
+            .expect(MUTEX_LOCK_ERROR_MESSAGE);
         let message_update_queue = match message_update_queue_lock.get(message_id) {
             Some(message_update_queue) => message_update_queue,
             None => {
                 message_update_queue_lock.insert(*message_id, Mutex::new(vec![update]));
                 return;
-            },
+            }
         };
         let mut message_updates = message_update_queue.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
         message_updates.push(update);
     }
-    pub fn remove_first_message_update_from_queue(&self, message_id: &u32) -> Option<ChatMessageUpdate> {
-        let mut message_update_queue_lock = self.message_update_queue.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
-        let mut message_update_queue = message_update_queue_lock.get_mut(message_id)?.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
+    pub fn remove_first_message_update_from_queue(
+        &self,
+        message_id: &u32,
+    ) -> Option<ChatMessageUpdate> {
+        let mut message_update_queue_lock = self
+            .message_update_queue
+            .lock()
+            .expect(MUTEX_LOCK_ERROR_MESSAGE);
+        let mut message_update_queue = message_update_queue_lock
+            .get_mut(message_id)?
+            .lock()
+            .expect(MUTEX_LOCK_ERROR_MESSAGE);
         if message_update_queue.len() == 0 {
             drop(message_update_queue);
-            message_update_queue_lock.remove(message_id); 
+            message_update_queue_lock.remove(message_id);
             return None;
         }
         let removed_message = message_update_queue.remove(0);
         // delete message update queue if it's empty
         if message_update_queue.len() == 0 {
             drop(message_update_queue);
-            message_update_queue_lock.remove(message_id); 
+            message_update_queue_lock.remove(message_id);
         }
         Some(removed_message)
     }
     pub fn is_update_first_in_queue(&self, message_id: &u32, update: &ChatMessageUpdate) -> bool {
-        let mut message_update_queue_lock = self.message_update_queue.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
+        let mut message_update_queue_lock = self
+            .message_update_queue
+            .lock()
+            .expect(MUTEX_LOCK_ERROR_MESSAGE);
         let message_update_queue = match message_update_queue_lock.get(message_id) {
             Some(message_update_queue) => message_update_queue,
             None => return false,
-        }.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
+        }
+        .lock()
+        .expect(MUTEX_LOCK_ERROR_MESSAGE);
         if message_update_queue.len() == 0 {
             drop(message_update_queue);
-            message_update_queue_lock.remove(message_id); 
+            message_update_queue_lock.remove(message_id);
             return false;
         }
         message_update_queue.first().unwrap() == update
     }
-
-    
 }

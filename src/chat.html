@@ -19,12 +19,19 @@
             const input = document.querySelector("#input");
 
             join_btn.addEventListener("click", function(e) {
+                let time;
                 this.disabled = true;
-
-                const websocket = new WebSocket("ws://127.0.0.1:3000/websocket");
-
+                const addr_for_client = window.location.href.substring(6);
+                console.log(addr_for_client)
+                const websocket = new WebSocket("ws://" + addr_for_client +"websocket");
+                let login_body = {};
+                if (username.value === "1") {
+                    login_body = {"id": "1", "token": "EQfXEWahJqDKWtGMCrFmeK1RME+hETYpezmj8qiguE+5vfJVE8p9TMPwa4m48IO7wA6E3ffkNEIc7Jushuze7A=="}
+                } else if (username.value === "2") {
+                    login_body = {"id": "2", "token": "TGYW1si4amdwk/Jj8l6r/4BApRdWdx45PoOQOFKIEftt9gZKpHwQbL3lrH36LTgwoKha/80TKiMYGiUHNt+MVQ=="}
+                }
                 websocket.onopen = function() {
-                    websocket.send(JSON.stringify({"head": "LOGIN", "body": {"id": "1", "token": "EQfXEWahJqDKWtGMCrFmeK1RME+hETYpezmj8qiguE+5vfJVE8p9TMPwa4m48IO7wA6E3ffkNEIc7Jushuze7A=="}}));
+                    websocket.send(JSON.stringify({"head": "LOGIN", "body": login_body}));
                 }
 
                 const btn = this;
@@ -35,13 +42,29 @@
                 }
 
                 websocket.onmessage = function(e) {
+                    const parsed_msg = JSON.parse(e.data);
                     console.log("received message: "+e.data);
-                    textarea.value += e.data+"\r\n";
-                    
+                    if (parsed_msg.head === "MESSAGE DELIVERED") {
+                        textarea.value += "Message: [" + parsed_msg.body.message.Text + "] Delivered to " + parsed_msg.body.timeDelivered.list.length + " users, including you."+"\r\n";
+                    }
+                    if (parsed_msg.head === "MESSAGE SEEN") {
+                        textarea.value += "Message: [" + parsed_msg.body.message.Text + "] Seen by " + parsed_msg.body.timeSeen.list.length + " users, including you."+"\r\n";
+                    }
+                    if (parsed_msg.head === "MESSAGE SENT") {
+                        textarea.value += "Message sent in " + (Date.now() - time).toString() + "ms" + "\r\n"; 
+                    }
+                    if (parsed_msg.head === "MESSAGE RECIEVED") {
+                        websocket.send(JSON.stringify({"head": "SEE MESSAGES", "body": [JSON.parse(e.data).body.id]}))
+                        if (parsed_msg.body.fromId.toString() !== login_body.id) {
+                            textarea.value += "Message: [" + parsed_msg.body.message.Text + "] Recieved from user id: " + parsed_msg.body.fromId +"\r\n";
+                        }
+                    }
+
                 }
 
                 input.onkeydown = function(e) {
                     if (e.key == "Enter") {
+                        time = Date.now()
                         websocket.send(JSON.stringify({"head": "SEND MESSAGE", "body": {"message": {"Text": input.value}, "to": 1}}));
                         input.value = "";
                     }

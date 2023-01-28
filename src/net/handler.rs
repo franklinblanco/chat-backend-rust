@@ -5,9 +5,9 @@ use futures::stream::SplitSink;
 use tokio::{sync::Mutex, task::JoinHandle};
 
 use crate::{
-    domain::{state::AppState, chat_message::BroadcastMessage},
+    domain::{chat_message::BroadcastMessage, state::AppState},
     service::{
-        message::{user_send_message, see_messages},
+        message::{see_messages, user_send_message},
         user::{is_addr_registered, register_addr},
     },
 };
@@ -29,7 +29,14 @@ pub async fn handle_message(
     let user_id = match is_addr_registered(&state, &addr) {
         Some(user_id) => user_id,
         None => {
-            return register_addr(state.clone(), &addr, sender, &client_message_in, all_send_tasks).await
+            return register_addr(
+                state.clone(),
+                &addr,
+                sender,
+                &client_message_in,
+                all_send_tasks,
+            )
+            .await
         }
     };
 
@@ -43,10 +50,11 @@ pub async fn handle_message(
         }
         super::recv::ClientMessageIn::Logout => todo!(),
         super::recv::ClientMessageIn::SeeMessages(seen_messages) => {
-            see_messages(&state, &user_id, seen_messages).await.unwrap();
-        },
+            see_messages(&state, &user_id, seen_messages).await?;
+        }
         super::recv::ClientMessageIn::SendMessage(message) => {
-            user_send_message(&state, user_id, BroadcastMessage::NewMessageRequest(message)).await?
+            user_send_message(state, user_id, BroadcastMessage::NewMessageRequest(message)).await?;
+            send_message(sender, super::send::ClientMessageOut::MessageSent).await?;
         }
         super::recv::ClientMessageIn::JoinGroup() => todo!(),
         super::recv::ClientMessageIn::LeaveGroup() => todo!(),

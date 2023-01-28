@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{
     mysql::{MySqlTypeInfo, MySqlValueRef},
-    MySql, FromRow,
+    FromRow, MySql,
 };
 
 /// Used for Both registering delivered and seen time in messages.
@@ -56,8 +56,10 @@ impl TimeSensitiveAction {
 pub struct ChatMessage {
     pub id: u32,
     /// User id
+    #[serde(rename = "fromId")]
     pub from_id: u32,
     /// ChatRoom id (Not a user id)
+    #[serde(rename = "toId")]
     pub to_id: u32,
     pub message: ChatMessageContent,
     /// This must always be there. Since its created.
@@ -147,7 +149,7 @@ pub struct ChatMessageSender {
 }
 
 /// This is what should be sent across the broadcast channels
-/// All of them use the same object so that the client can just replace its own 
+/// All of them use the same object so that the client can just replace its own
 /// Copy of it with the server's authority.
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum BroadcastMessage {
