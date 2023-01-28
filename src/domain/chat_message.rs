@@ -2,7 +2,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{
     mysql::{MySqlTypeInfo, MySqlValueRef},
-    MySql,
+    MySql, FromRow,
 };
 
 /// Used for Both registering delivered and seen time in messages.
@@ -52,7 +52,7 @@ impl TimeSensitiveAction {
 }
 
 /// Base message for chat rooms.
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, FromRow)]
 pub struct ChatMessage {
     pub id: u32,
     /// User id
@@ -144,4 +144,15 @@ impl ChatSendable for ChatMessage {
 pub struct ChatMessageSender {
     pub message: ChatMessageContent,
     pub to: u32,
+}
+
+/// This is what should be sent across the broadcast channels
+/// All of them use the same object so that the client can just replace its own 
+/// Copy of it with the server's authority.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum BroadcastMessage {
+    NewMessageRequest(ChatMessageSender),
+    NewMessage(ChatMessage),
+    DeliveredUpdate(ChatMessage),
+    SeenUpdate(ChatMessage),
 }

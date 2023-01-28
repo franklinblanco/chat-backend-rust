@@ -1,6 +1,6 @@
 use tokio::sync::broadcast;
 
-use super::chat_message::ChatMessage;
+use super::chat_message::{BroadcastMessage};
 
 #[derive(Debug, Clone)]
 pub struct ChatRoomChannel {
@@ -10,7 +10,7 @@ pub struct ChatRoomChannel {
     /// para recibir los mensajes.
     /// Lo mas importante aqui es que esto sirve para elegir a quien se le va a enviar mensajes.
     /// El Tipo dentro del Sender es lo que se va a enviar a traves de los canales
-    pub recipient_sockets: broadcast::Sender<ChatMessage>,
+    pub recipient_sockets: broadcast::Sender<BroadcastMessage>,
     pub participants: Vec<u32>,
     /// El id en la base de datos de este chat room
     pub chat_room_id: u32,
@@ -19,7 +19,7 @@ pub struct ChatRoomChannel {
 
 impl ChatRoomChannel {
     pub fn new(
-        sender: broadcast::Sender<ChatMessage>,
+        sender: broadcast::Sender<BroadcastMessage>,
         participants: Vec<u32>,
         chat_room_id: u32,
     ) -> Self {

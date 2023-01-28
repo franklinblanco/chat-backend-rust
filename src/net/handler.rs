@@ -5,9 +5,9 @@ use futures::stream::SplitSink;
 use tokio::{sync::Mutex, task::JoinHandle};
 
 use crate::{
-    domain::state::AppState,
+    domain::{state::AppState, chat_message::BroadcastMessage},
     service::{
-        message::user_send_message,
+        message::{user_send_message, see_messages},
         user::{is_addr_registered, register_addr},
     },
 };
@@ -42,9 +42,11 @@ pub async fn handle_message(
             .await?
         }
         super::recv::ClientMessageIn::Logout => todo!(),
-        super::recv::ClientMessageIn::SeeMessages(_) => todo!(),
+        super::recv::ClientMessageIn::SeeMessages(seen_messages) => {
+            see_messages(&state, &user_id, seen_messages).await.unwrap();
+        },
         super::recv::ClientMessageIn::SendMessage(message) => {
-            user_send_message(&state, user_id, message).await?
+            user_send_message(&state, user_id, BroadcastMessage::NewMessageRequest(message)).await?
         }
         super::recv::ClientMessageIn::JoinGroup() => todo!(),
         super::recv::ClientMessageIn::LeaveGroup() => todo!(),

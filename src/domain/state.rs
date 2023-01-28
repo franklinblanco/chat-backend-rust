@@ -5,7 +5,7 @@ use tokio::sync::broadcast::{self, Receiver, Sender};
 
 use crate::net::error::{SocketError, MUTEX_LOCK_ERROR_MESSAGE};
 
-use super::{chat_message::ChatMessage, chat_room_channel::ChatRoomChannel, chat_message_update::ChatMessageUpdate};
+use super::{chat_message::{BroadcastMessage}, chat_room_channel::ChatRoomChannel, chat_message_update::ChatMessageUpdate};
 
 const MAX_CONCURRENT_ROOM_CAPACITY: usize = 150;
 
@@ -66,7 +66,7 @@ impl AppState {
         &self,
         room_id: u32,
         user_id: &u32,
-    ) -> Result<Receiver<ChatMessage>, Box<dyn std::error::Error + Send + Sync>> {
+    ) -> Result<Receiver<BroadcastMessage>, Box<dyn std::error::Error + Send + Sync>> {
         let mut chat_rooms = self.rooms.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
         let (tx, rx) = broadcast::channel(MAX_CONCURRENT_ROOM_CAPACITY);
         let chat_room_channel = ChatRoomChannel::new(tx, vec![], room_id);
@@ -93,7 +93,7 @@ impl AppState {
     pub fn subscribe_to_channel(
         &self,
         room_id: &u32,
-    ) -> Result<Receiver<ChatMessage>, Box<dyn std::error::Error + Send + Sync>> {
+    ) -> Result<Receiver<BroadcastMessage>, Box<dyn std::error::Error + Send + Sync>> {
         let chat_rooms = self.rooms.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
         match chat_rooms.get(room_id) {
             Some(chat_room_channel) => Ok(chat_room_channel.recipient_sockets.subscribe()),
@@ -105,7 +105,7 @@ impl AppState {
     pub fn get_cloned_broadcast_sender_to_chat_room(
         &self,
         room_id: &u32,
-    ) -> Result<Sender<ChatMessage>, Box<dyn std::error::Error + Send + Sync>> {
+    ) -> Result<Sender<BroadcastMessage>, Box<dyn std::error::Error + Send + Sync>> {
         let chat_rooms = self.rooms.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
         match chat_rooms.get(room_id) {
             Some(chat_room_channel) => Ok(chat_room_channel.recipient_sockets.clone()),

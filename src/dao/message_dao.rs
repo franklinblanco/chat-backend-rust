@@ -53,3 +53,16 @@ pub async fn update_message(
         Err(error) => Err(Box::new(error)),
     }
 }
+
+pub async fn fetch_messages_with_ids(conn: &MySqlPool, message_ids: &Vec<u32>) -> Result<Vec<ChatMessage>, Box<dyn std::error::Error + Send + Sync>> {
+    let mut query = "SELECT * FROM message where id in (".to_string();
+    for message_id in message_ids {
+        query.push_str(&format!("{}, ", message_id.to_string()));
+    }
+    query.remove(query.len() - 1);
+    query.push_str(")");
+    match sqlx::query_as(query.as_str()).fetch_all(conn).await {
+        Ok(messages) => Ok(messages),
+        Err(error) => Err(Box::new(error)),
+    }
+}

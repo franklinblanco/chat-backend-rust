@@ -20,9 +20,9 @@ pub enum ClientMessageOut {
     /// Whenever a user gets a message
     MessageRecieved(ChatMessage),
     /// Whenever a message sent by the user gets delivered along with the MessageId
-    MessageDelivered(MessageTimeChangeUpdate),
+    MessageDelivered(ChatMessage),
     /// Whenever a message sent by the user gets seen along with the MessageId
-    MessageSeen(MessageTimeChangeUpdate),
+    MessageSeen(ChatMessage),
 
     Error(String),
 }

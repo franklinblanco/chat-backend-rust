@@ -22,7 +22,7 @@ pub enum ClientMessageIn {
     Logout,
 
     /// A list of MessageId's that the client reports to see
-    SeeMessages(Vec<u128>),
+    SeeMessages(Vec<u32>),
     SendMessage(ChatMessageSender),
 
     /// Client can send this to server to fetch old messages.
