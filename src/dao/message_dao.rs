@@ -4,7 +4,7 @@ use crate::domain::chat_message::ChatMessage;
 
 pub async fn get_message(
     conn: &MySqlPool,
-    message_id: u32,
+    message_id: &u32,
 ) -> Result<Option<ChatMessage>, Box<dyn std::error::Error + Send + Sync>> {
     match sqlx::query_file_as!(ChatMessage, "sql/message/get.sql", message_id)
         .fetch_optional(conn)

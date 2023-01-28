@@ -29,7 +29,7 @@ pub async fn handle_message(
     let user_id = match is_addr_registered(&state, &addr) {
         Some(user_id) => user_id,
         None => {
-            return register_addr(&state, &addr, sender, &client_message_in, all_send_tasks).await
+            return register_addr(state.clone(), &addr, sender, &client_message_in, all_send_tasks).await
         }
     };
 

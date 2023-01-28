@@ -9,6 +9,8 @@ use crate::{
     net::error::SocketError,
 };
 
+/// Gets called when a message is recieved from a socket client, this broadcasts it to all the connected sockets
+/// And persists it.
 pub async fn user_send_message(
     state: &Arc<AppState>,
     user_id: u32,
