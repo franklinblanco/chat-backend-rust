@@ -6,7 +6,7 @@ use futures::stream::SplitSink;
 use tokio::{sync::Mutex, task::JoinHandle};
 
 use crate::{
-    domain::{state::AppState},
+    domain::state::AppState,
     service::{
         message::{see_messages, user_send_message},
         user::{is_addr_registered, register_addr},

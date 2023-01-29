@@ -1,15 +1,16 @@
 use std::{sync::Arc, time::Duration};
 
-use chat_types::domain::{chat_message::{BroadcastMessage, ChatMessage, TimeSensitiveAction, ChatSendable}, chat_message_update::ChatMessageUpdate};
+use chat_types::domain::{
+    chat_message::{BroadcastMessage, ChatMessage, ChatSendable, TimeSensitiveAction},
+    chat_message_update::ChatMessageUpdate,
+};
 use chrono::Utc;
 use tokio::time::sleep;
 
 use crate::{
     dao::message_dao::{self, insert_message},
-    domain::{
-        state::AppState,
-    },
-    net::{error::SocketError},
+    domain::state::AppState,
+    net::error::SocketError,
 };
 
 /// Gets called when a message is recieved from a socket client, this broadcasts it to all the connected sockets

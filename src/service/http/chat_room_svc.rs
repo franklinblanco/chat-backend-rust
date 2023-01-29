@@ -6,7 +6,7 @@ use err::MessageResource;
 use reqwest::Client;
 use sqlx::MySqlPool;
 
-use crate::{dao::chat_room_dao};
+use crate::dao::chat_room_dao;
 
 pub async fn get_all_user_chat_rooms(
     conn: &MySqlPool,
@@ -26,4 +26,13 @@ pub async fn get_all_user_chat_rooms(
         };
 
     TypedHttpResponse::return_standard_response(200, all_user_chat_rooms)
+}
+
+pub async fn create_new_chat_room(
+    conn: &MySqlPool,
+    _client: &Client,
+    user: User,
+    _request: HttpRequest,
+) -> TypedHttpResponse<ChatRoom> {
+    TypedHttpResponse::return_empty_response(200)
 }

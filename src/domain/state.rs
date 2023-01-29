@@ -6,9 +6,7 @@ use tokio::sync::broadcast::{self, Receiver, Sender};
 
 use crate::net::error::{SocketError, MUTEX_LOCK_ERROR_MESSAGE};
 
-use super::{
-    chat_room_channel::ChatRoomChannel,
-};
+use super::chat_room_channel::ChatRoomChannel;
 
 const MAX_CONCURRENT_ROOM_CAPACITY: usize = 150;
 
