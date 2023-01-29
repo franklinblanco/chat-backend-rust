@@ -1,6 +1,5 @@
+use chat_types::domain::chat_room::ChatRoom;
 use sqlx::{mysql::MySqlQueryResult, MySqlPool};
-
-use crate::domain::chat_room::ChatRoom;
 
 #[allow(unused)]
 pub async fn insert_chat_room(

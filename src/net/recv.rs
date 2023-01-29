@@ -1,9 +1,8 @@
 use std::fmt::Display;
 
+use chat_types::domain::chat_message::ChatMessageSender;
 use dev_dtos::dtos::user::user_dtos::UserForAuthenticationDto;
 use serde::{Deserialize, Serialize};
-
-use crate::domain::chat_message::ChatMessageSender;
 
 use super::{error::SocketError, message::ClientMessage};
 

@@ -1,11 +1,12 @@
 use std::{net::SocketAddr, sync::Arc};
 
 use axum::extract::ws::{Message, WebSocket};
+use chat_types::domain::chat_message::BroadcastMessage;
 use futures::stream::SplitSink;
 use tokio::{sync::Mutex, task::JoinHandle};
 
 use crate::{
-    domain::{chat_message::BroadcastMessage, state::AppState},
+    domain::{state::AppState},
     service::{
         message::{see_messages, user_send_message},
         user::{is_addr_registered, register_addr},

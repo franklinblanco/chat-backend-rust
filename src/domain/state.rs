@@ -1,12 +1,12 @@
 use std::{collections::HashMap, net::SocketAddr, sync::Mutex};
 
+use chat_types::domain::{chat_message::BroadcastMessage, chat_message_update::ChatMessageUpdate};
 use sqlx::MySqlPool;
 use tokio::sync::broadcast::{self, Receiver, Sender};
 
 use crate::net::error::{SocketError, MUTEX_LOCK_ERROR_MESSAGE};
 
 use super::{
-    chat_message::BroadcastMessage, chat_message_update::ChatMessageUpdate,
     chat_room_channel::ChatRoomChannel,
 };
 

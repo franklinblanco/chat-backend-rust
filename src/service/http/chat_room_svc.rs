@@ -1,11 +1,12 @@
 use actix_web::HttpRequest;
 use actix_web_utils::extensions::typed_response::TypedHttpResponse;
+use chat_types::domain::chat_room::ChatRoom;
 use dev_dtos::domain::user::user::User;
 use err::MessageResource;
 use reqwest::Client;
 use sqlx::MySqlPool;
 
-use crate::{dao::chat_room_dao, domain::chat_room::ChatRoom};
+use crate::{dao::chat_room_dao};
 
 pub async fn get_all_user_chat_rooms(
     conn: &MySqlPool,

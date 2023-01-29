@@ -1,4 +1,4 @@
-use crate::domain::chat_message::{ChatMessage, TimeSensitiveAction};
+use chat_types::domain::chat_message::{ChatMessage, TimeSensitiveAction};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::fmt::Display;

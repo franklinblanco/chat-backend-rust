@@ -1,6 +1,7 @@
 use std::{net::SocketAddr, sync::Arc, time::Duration};
 
 use axum::extract::ws::{Message, WebSocket};
+use chat_types::domain::{chat_message::{BroadcastMessage, TimeSensitiveAction}, chat_message_update::ChatMessageUpdate};
 use chrono::Utc;
 use dev_communicators::middleware::user_svc::user_service;
 use futures::stream::SplitSink;
@@ -9,8 +10,6 @@ use tokio::{sync::Mutex, task::JoinHandle, time::sleep};
 use crate::{
     dao::{chat_room_dao, message_dao},
     domain::{
-        chat_message::{BroadcastMessage, TimeSensitiveAction},
-        chat_message_update::ChatMessageUpdate,
         state::AppState,
     },
     net::{

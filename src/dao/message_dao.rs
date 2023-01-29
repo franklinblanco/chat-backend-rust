@@ -1,6 +1,5 @@
+use chat_types::domain::chat_message::ChatMessage;
 use sqlx::{mysql::MySqlQueryResult, MySqlPool};
-
-use crate::domain::chat_message::ChatMessage;
 
 pub async fn get_message(
     conn: &MySqlPool,
