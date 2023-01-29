@@ -1,10 +1,10 @@
 use actix_web::{
     get, post,
-    web::{Data, Path},
+    web::{Data, Path, Json},
     HttpRequest,
 };
 use actix_web_utils::extensions::typed_response::TypedHttpResponse;
-use chat_types::domain::chat_room::ChatRoom;
+use chat_types::{domain::chat_room::ChatRoom, dto::chat::ChatRoomParticipants};
 use dev_macros::authenticate_route;
 use reqwest::Client;
 use sqlx::MySqlPool;
@@ -27,7 +27,9 @@ pub async fn create_new_chat_room(
     client: Data<Client>,
     request: HttpRequest,
     title: Path<String>,
+    participants: Json<ChatRoomParticipants>,    
 ) -> TypedHttpResponse<ChatRoom> {
     let user = authenticate_route!(request, &client);
-    TypedHttpResponse::return_empty_response(200)
+    
+    chat_room_svc::create_new_chat_room(&conn, &client, user, request, participants.0, title.to_string()).await
 }

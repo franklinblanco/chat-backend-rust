@@ -542,7 +542,6 @@ dependencies = [
 [[package]]
 name = "chat-types"
 version = "0.1.0"
-source = "git+https://git.franklinblanco.dev/franklinblanco/chat-types.git#19c456732391d03203e19e51fe0ffca71eaa6a00"
 dependencies = [
  "chrono",
  "serde",

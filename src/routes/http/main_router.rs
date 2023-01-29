@@ -2,7 +2,7 @@ use actix_cors::Cors;
 use actix_web::{web, App, HttpServer};
 use sqlx::MySqlPool;
 
-use crate::routes::http::chat_room::get_all_user_chat_rooms;
+use crate::{routes::http::chat_room::{get_all_user_chat_rooms, create_new_chat_room}};
 
 pub async fn start_http_server(
     database_connection: MySqlPool,
@@ -19,7 +19,9 @@ pub async fn start_http_server(
             .app_data(client_state.clone())
             .service(
                 web::scope("/chat")
-                    .service(web::scope("/room").service(get_all_user_chat_rooms))
+                    .service(web::scope("/room")
+                        .service(get_all_user_chat_rooms)
+                        .service(create_new_chat_room))
                     .service(
                         web::scope("/messages"), //    .service()
                     ),

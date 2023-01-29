@@ -19,7 +19,7 @@ async fn main() {
     let database_pool = main_dao::start_database_connection().await.unwrap();
     let client_pool = reqwest::Client::new();
     let _ = tokio::join!(
-        start_ws_server(database_pool.clone(), client_pool.clone()),
+        //start_ws_server(database_pool.clone(), client_pool.clone()),
         start_http_server(database_pool.clone(), client_pool.clone())
     );
 }

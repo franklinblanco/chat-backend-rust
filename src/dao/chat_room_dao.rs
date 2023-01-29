@@ -1,4 +1,5 @@
 use chat_types::domain::chat_room::ChatRoom;
+use chrono::Utc;
 use sqlx::{mysql::MySqlQueryResult, MySqlPool};
 
 #[allow(unused)]
@@ -73,6 +74,30 @@ pub async fn fetch_all_user_chat_rooms(
         .await
     {
         Ok(found) => Ok(found),
+        Err(error) => Err(Box::new(error)),
+    }
+}
+
+pub async fn insert_chat_room_participants(
+    conn: &MySqlPool,
+    participant_ids: Vec<u32>,
+    chat_room_id: &u32
+) -> Result<MySqlQueryResult, Box<dyn std::error::Error>> {
+    let time = Utc::now();
+    let mut query = "INSERT INTO chat_users (
+    chat_room_id,
+    user_id,
+    time_joined) VALUES ".to_string();
+    
+    for participant_id in participant_ids {
+        query.push_str(&format!("({chat_room_id}, {participant_id}, {}),", time));
+    };
+    
+    query.remove(query.len() - 1);
+    query.push_str(";");
+    
+    match sqlx::query(&query).execute(conn).await {
+        Ok(query_result) => Ok(query_result),
         Err(error) => Err(Box::new(error)),
     }
 }
