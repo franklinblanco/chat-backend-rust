@@ -1,0 +1,1 @@
+SELECT * FROM chat_users WHERE chat_room_id = ?

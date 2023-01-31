@@ -1,4 +1,4 @@
-use chat_types::domain::chat_room::ChatRoom;
+use chat_types::domain::{chat_room::ChatRoom, chat_user::ChatUser};
 use chrono::Utc;
 use sqlx::{mysql::MySqlQueryResult, MySqlPool};
 
@@ -80,7 +80,7 @@ pub async fn fetch_all_user_chat_rooms(
 
 pub async fn insert_chat_room_participants(
     conn: &MySqlPool,
-    participant_ids: Vec<u32>,
+    participant_ids: &Vec<u32>,
     chat_room_id: &u32
 ) -> Result<MySqlQueryResult, Box<dyn std::error::Error>> {
     let time = Utc::now();
@@ -90,7 +90,7 @@ pub async fn insert_chat_room_participants(
     time_joined) VALUES ".to_string();
     
     for participant_id in participant_ids {
-        query.push_str(&format!("({chat_room_id}, {participant_id}, {}),", time));
+        query.push_str(&format!("({chat_room_id}, {participant_id}, \"{}\"),", time.to_string()));
     };
     
     query.remove(query.len() - 1);
@@ -98,6 +98,13 @@ pub async fn insert_chat_room_participants(
     
     match sqlx::query(&query).execute(conn).await {
         Ok(query_result) => Ok(query_result),
+        Err(error) => Err(Box::new(error)),
+    }
+}
+
+pub async fn get_chat_room_participants(conn: &MySqlPool, chat_room_id: &u32) -> Result<Vec<ChatUser>, Box<dyn std::error::Error>> {
+    match sqlx::query_file_as!(ChatUser, "sql/chat_users/get_all_in_chat_room.sql", chat_room_id).fetch_all(conn).await {
+        Ok(chat_users) => Ok(chat_users),
         Err(error) => Err(Box::new(error)),
     }
 }

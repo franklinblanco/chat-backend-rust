@@ -190,6 +190,57 @@
     },
     "query": "SELECT cr.* FROM chat_room cr\nLEFT JOIN chat_users cu ON cu.chat_room_id = cr.id\nWHERE cu.user_id = ?\nORDER BY cu.time_joined DESC"
   },
+  "816c6db2c2ad07e15d1a0c38c93389dbb5856492cacefc3a06496c94a2e04c32": {
+    "describe": {
+      "columns": [
+        {
+          "name": "chat_room_id",
+          "ordinal": 0,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4129
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "user_id",
+          "ordinal": 1,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4129
+            },
+            "max_size": 10,
+            "type": "Long"
+          }
+        },
+        {
+          "name": "time_joined",
+          "ordinal": 2,
+          "type_info": {
+            "char_set": 63,
+            "flags": {
+              "bits": 4225
+            },
+            "max_size": 19,
+            "type": "Timestamp"
+          }
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "SELECT * FROM chat_users WHERE chat_room_id = ?"
+  },
   "8d56415b3728d5a77705204ac1fbdedc366b026b91dc0fb565c0ae4c6a2863e4": {
     "describe": {
       "columns": [],
