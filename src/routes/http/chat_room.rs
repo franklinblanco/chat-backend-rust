@@ -1,7 +1,7 @@
 use actix_web::{
     get, post,
     web::{Data, Path, Json},
-    HttpRequest,
+    HttpRequest, delete,
 };
 use actix_web_utils::extensions::typed_response::TypedHttpResponse;
 use chat_types::{domain::{chat_room::ChatRoom, chat_user::ChatUser}, dto::chat::ChatRoomParticipants};
@@ -56,3 +56,26 @@ pub async fn get_chat_room_participants(
     let user = authenticate_route!(request, &client);
     chat_room_svc::get_chat_room_participants(&conn, &client, user, request, *chat_room_id).await
 }
+
+#[delete("/{chat_room_id}/leave")]
+pub async fn leave_chat_room(
+    conn: Data<MySqlPool>,
+    client: Data<Client>,
+    request: HttpRequest,
+    chat_room_id: Path<u32>,
+) -> TypedHttpResponse<ChatUser> {
+    let user = authenticate_route!(request, &client);
+    chat_room_svc::leave_chat_room(&conn, &client, user, request, *chat_room_id).await
+}
+
+#[delete("/{chat_room_id}/kick/{user_id}")]
+pub async fn kick_user_from_chat_room(
+    conn: Data<MySqlPool>,
+    client: Data<Client>,
+    request: HttpRequest,
+    path_vars: Path<(u32, u32)>,
+) -> TypedHttpResponse<ChatUser> {
+    let user = authenticate_route!(request, &client);
+    chat_room_svc::kick_user_from_chat_room(&conn, &client, user, request, path_vars.0, path_vars.1).await
+}
+

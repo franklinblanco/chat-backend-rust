@@ -1,6 +1,6 @@
 use actix_web::{HttpRequest};
 use actix_web_utils::extensions::typed_response::TypedHttpResponse;
-use chat_types::{domain::{chat_room::ChatRoom, chat_user::ChatUser}, dto::chat::ChatRoomParticipants};
+use chat_types::{domain::{chat_room::{ChatRoom}, chat_user::ChatUser}, dto::chat::ChatRoomParticipants};
 use dev_dtos::domain::user::user::User;
 use err::MessageResource;
 use reqwest::Client;
@@ -85,7 +85,7 @@ pub async fn add_participants_to_chat_room(
 pub async fn get_chat_room_participants(
     conn: &MySqlPool,
     _client: &Client,
-    user: User,
+    _user: User,
     _request: HttpRequest,
     chat_room_id: u32,
 ) -> TypedHttpResponse<Vec<ChatUser>> {
@@ -93,4 +93,63 @@ pub async fn get_chat_room_participants(
         Ok(participants) => TypedHttpResponse::return_standard_response(200, participants),
         Err(error) => TypedHttpResponse::return_standard_error(500, MessageResource::new_from_string(error.to_string()))
     }
+}
+
+
+pub async fn leave_chat_room(
+    conn: &MySqlPool,
+    _client: &Client,
+    user: User,
+    _request: HttpRequest,
+    chat_room_id: u32,
+) -> TypedHttpResponse<ChatUser> {
+    let participants = match chat_room_dao::get_chat_room_participants(conn, &chat_room_id).await {
+        Ok(participants) => participants,
+        Err(error) => return TypedHttpResponse::return_standard_error(500, MessageResource::new_from_string(error.to_string()))
+    };
+    if participants.len() <= 0 || participants.iter().find(|participant| participant.user_id == user.id as u32).is_none() {
+        return TypedHttpResponse::return_standard_error(404, MessageResource::new_from_str("User doesn't belong to this chat room."));
+    };
+    match chat_room_dao::delete_chat_room_participant(conn, &chat_room_id, user.id as u32).await {
+        Ok(deleted_opt) => match deleted_opt {
+            Some(_) => TypedHttpResponse::return_empty_response(200),
+            None => TypedHttpResponse::return_standard_error(404, MessageResource::new_from_str("Couldn't delete participant from chat room")),
+        },
+        Err(error) => return TypedHttpResponse::return_standard_error(500, MessageResource::new_from_string(error.to_string()))
+    }
+}
+
+pub async fn kick_user_from_chat_room(
+    conn: &MySqlPool,
+    _client: &Client,
+    user: User,
+    _request: HttpRequest,
+    chat_room_id: u32,
+    user_to_be_kicked: u32,
+) -> TypedHttpResponse<ChatUser> {
+    let participants = match chat_room_dao::get_chat_room_participants(conn, &chat_room_id).await {
+        Ok(participants) => participants,
+        Err(error) => return TypedHttpResponse::return_standard_error(500, MessageResource::new_from_string(error.to_string()))
+    };
+    if participants.len() <= 0 || participants.iter().find(|participant| participant.user_id == user_to_be_kicked).is_none() {
+        return TypedHttpResponse::return_standard_error(404, MessageResource::new_from_str("User doesn't belong to this chat room."));
+    };
+    let chat_room = match chat_room_dao::get_chat_room_with_id(conn, &chat_room_id).await {
+        Ok(chat_room_opt) => match chat_room_opt {
+            Some(chat_room) => chat_room,
+            None => return TypedHttpResponse::return_standard_error(404, MessageResource::new_from_str("Chat room with id specified doesn't exist. ")),
+        },
+        Err(error) => return TypedHttpResponse::return_standard_error(500, MessageResource::new_from_string(error.to_string()))
+    };
+    if chat_room.owner_id != user.id as u32 {
+        return TypedHttpResponse::return_standard_error(401, MessageResource::new_from_str("You are not the owner of this chat room."));
+    }
+    match chat_room_dao::delete_chat_room_participant(conn, &chat_room_id, user.id as u32).await {
+        Ok(deleted_opt) => match deleted_opt {
+            Some(_) => TypedHttpResponse::return_empty_response(200),
+            None => TypedHttpResponse::return_standard_error(404, MessageResource::new_from_str("Couldn't delete participant from chat room")),
+        },
+        Err(error) => return TypedHttpResponse::return_standard_error(500, MessageResource::new_from_string(error.to_string()))
+    }
+
 }

@@ -1,0 +1,1 @@
+DELETE FROM chat_users WHERE chat_room_id = ? AND user_id = ?;

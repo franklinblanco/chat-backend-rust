@@ -113,6 +113,16 @@
     },
     "query": "SELECT id, from_id, to_id, message as \"message: _\", time_sent, time_delivered as \"time_delivered: _\", time_seen as \"time_seen: _\" FROM message WHERE id = ?;"
   },
+  "3c858ef90c5e903a2e60f5ca5384ff315df64cc334ce03dfe9d15ab1111bcf82": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "DELETE FROM chat_users WHERE chat_room_id = ? AND user_id = ?;"
+  },
   "4cb918ef7d3bab74dc74ef168dfee35d73f06193627d4ab499cf7acfa3ffe10a": {
     "describe": {
       "columns": [

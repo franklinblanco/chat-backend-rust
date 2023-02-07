@@ -108,3 +108,10 @@ pub async fn get_chat_room_participants(conn: &MySqlPool, chat_room_id: &u32) ->
         Err(error) => Err(Box::new(error)),
     }
 }
+
+pub async fn delete_chat_room_participant(conn: &MySqlPool, chat_room_id: &u32, user_id: u32) -> Result<Option<()>, Box<dyn std::error::Error>> {
+    match sqlx::query_file!("sql/chat_users/remove_participant.sql", chat_room_id, user_id).execute(conn).await {
+        Ok(query_result) => if query_result.rows_affected() > 0 { return Ok(Some(())) } else {return Ok(None)},
+        Err(error) => Err(Box::new(error)),
+    }
+}
