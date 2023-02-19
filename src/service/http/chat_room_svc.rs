@@ -95,7 +95,6 @@ pub async fn get_chat_room_participants(
     }
 }
 
-
 pub async fn leave_chat_room(
     conn: &MySqlPool,
     _client: &Client,
