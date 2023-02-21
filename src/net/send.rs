@@ -1,10 +1,7 @@
-use chat_types::domain::chat_message::{ChatMessage, TimeSensitiveAction};
+use chat_types::{domain::chat_message::{ChatMessage, TimeSensitiveAction}, dto::message::ClientMessage};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::fmt::Display;
-
-use super::message::ClientMessage;
-
 pub trait Sendable {
     fn into_message(self) -> Result<ClientMessage, Box<dyn std::error::Error + Send + Sync>>;
 }

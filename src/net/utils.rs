@@ -1,12 +1,12 @@
 use std::sync::Arc;
 
 use axum::extract::ws::{Message, WebSocket};
+use chat_types::dto::message::ClientMessage;
 use futures::{stream::SplitSink, SinkExt};
 use tokio::sync::Mutex;
 
 use super::{
     error::SocketError,
-    message::ClientMessage,
     recv::{ClientMessageIn, Receivable},
     send::{ClientMessageOut, Sendable},
 };

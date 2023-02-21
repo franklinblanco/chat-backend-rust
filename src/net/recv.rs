@@ -1,10 +1,10 @@
 use std::fmt::Display;
 
-use chat_types::domain::chat_message::ChatMessageSender;
+use chat_types::{domain::chat_message::ChatMessageSender, dto::message::ClientMessage};
 use dev_dtos::dtos::user::user_dtos::UserForAuthenticationDto;
 use serde::{Deserialize, Serialize};
 
-use super::{error::SocketError, message::ClientMessage};
+use super::{error::SocketError};
 
 pub trait Receivable {
     fn from_message(
