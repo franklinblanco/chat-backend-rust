@@ -24,9 +24,9 @@ openssl = { version = "0.10", features = ["vendored"] }
 
 chat-types = { path = "../libs/chat-types" }
 
-actix-web-utils = { git = "https://github.com/franklinblanco/actix-web-utils.git" }
-err = { git = "https://github.com/franklinblanco/err.git" }
+actix-web-utils = { git = "https://git.franklinblanco.dev/franklinblanco/actix-web-utils.git" }
+err = { git = "https://git.franklinblanco.dev/franklinblanco/err.git" }
 
-dev-communicators = { git = "https://github.com/franklinblanco/user-svc-client-rust.git" }
-dev-dtos = { git = "https://github.com/franklinblanco/user-svc-dtos-rust.git" }
-dev-macros = { git = "https://github.com/franklinblanco/dev-macros.git" }
+dev-communicators = { git = "https://git.franklinblanco.dev/franklinblanco/dev-communicators.git" }
+dev-dtos = { git = "https://git.franklinblanco.dev/franklinblanco/user-svc-dtos-rust.git" }
+dev-macros = { git = "https://git.franklinblanco.dev/franklinblanco/dev-macros.git" }

@@ -201,7 +201,7 @@ dependencies = [
 [[package]]
 name = "actix-web-utils"
 version = "0.2.21"
-source = "git+https://github.com/franklinblanco/actix-web-utils.git#416e44e849a4911fde589424a703236585192365"
+source = "git+https://git.franklinblanco.dev/franklinblanco/actix-web-utils.git#3cb538795b3454f901bf18b6ecae878976671b78"
 dependencies = [
  "actix-web",
  "err",
@@ -549,6 +549,7 @@ name = "chat-types"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "dev-dtos",
  "serde",
  "serde_json",
  "sqlx",
@@ -762,7 +763,7 @@ dependencies = [
 [[package]]
 name = "dev-communicators"
 version = "0.1.0"
-source = "git+https://github.com/franklinblanco/user-svc-client-rust.git#a4d99562c36b389315558915ab060a3dc17ac507"
+source = "git+https://git.franklinblanco.dev/franklinblanco/dev-communicators.git#16f9b31a7099caf86abe4c0ce1859b2ed714d9e6"
 dependencies = [
  "actix-web-utils",
  "dev-dtos",
@@ -775,7 +776,7 @@ dependencies = [
 [[package]]
 name = "dev-dtos"
 version = "0.1.0"
-source = "git+https://github.com/franklinblanco/user-svc-dtos-rust.git#400f705ead30467cadc96d7aef6a3163f323df45"
+source = "git+https://git.franklinblanco.dev/franklinblanco/user-svc-dtos-rust.git#400f705ead30467cadc96d7aef6a3163f323df45"
 dependencies = [
  "chrono",
  "serde",
@@ -784,7 +785,7 @@ dependencies = [
 [[package]]
 name = "dev-macros"
 version = "0.1.0"
-source = "git+https://github.com/franklinblanco/dev-macros.git#5ef5f486547163bcddfff3a561a23c1135519590"
+source = "git+https://git.franklinblanco.dev/franklinblanco/dev-macros.git#196976c635a58574d0d65dd2e07cf00d52f80c29"
 dependencies = [
  "dev-dtos",
  "serde",
@@ -829,7 +830,7 @@ dependencies = [
 [[package]]
 name = "err"
 version = "0.1.1"
-source = "git+https://github.com/franklinblanco/err.git#d814091e7367d101197c35e2f7e56a744ce4296b"
+source = "git+https://git.franklinblanco.dev/franklinblanco/err.git#d814091e7367d101197c35e2f7e56a744ce4296b"
 dependencies = [
  "serde",
 ]

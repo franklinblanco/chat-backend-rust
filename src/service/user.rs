@@ -1,10 +1,10 @@
 use std::{net::SocketAddr, sync::Arc, time::Duration};
 
 use axum::extract::ws::{Message, WebSocket};
-use chat_types::domain::{
+use chat_types::{domain::{
     chat_message::{BroadcastMessage, TimeSensitiveAction},
-    chat_message_update::ChatMessageUpdate,
-};
+    chat_message_update::ChatMessageUpdate, error::{MUTEX_LOCK_ERROR_MESSAGE, SocketError},
+}, dto::{server_in::ServerMessageIn, server_out::ServerMessageOut}};
 use chrono::Utc;
 use dev_communicators::middleware::user_svc::user_service;
 use futures::stream::SplitSink;
@@ -14,9 +14,6 @@ use crate::{
     dao::{chat_room_dao, message_dao},
     domain::state::AppState,
     net::{
-        error::{SocketError, MUTEX_LOCK_ERROR_MESSAGE},
-        recv::ClientMessageIn,
-        send::ClientMessageOut,
         utils::send_message,
     },
     service::message::user_send_message,
@@ -35,11 +32,11 @@ pub async fn register_addr(
     state: Arc<AppState>,
     addr: &SocketAddr,
     sender: Arc<Mutex<SplitSink<WebSocket, Message>>>,
-    message: &ClientMessageIn,
+    message: &ServerMessageIn,
     all_send_tasks: &mut Vec<JoinHandle<()>>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let user_for_auth = match message {
-        ClientMessageIn::Login(user_for_auth) => user_for_auth,
+        ServerMessageIn::Login(user_for_auth) => user_for_auth,
         _ => {
             return Err(SocketError::boxed_error(format!(
                 "Non authorized user attempting to perform authed action. Message: {:?}",
@@ -51,7 +48,7 @@ pub async fn register_addr(
     // Auth user
     let persisted_user =
         user_service::authenticate_user_with_token(&state.conn, user_for_auth).await?;
-    let _ = send_message(sender.clone(), ClientMessageOut::LoggedIn).await;
+    let _ = send_message(sender.clone(), ServerMessageOut::LoggedIn).await;
     let user_id = persisted_user.id.try_into()?;
     // Store user id along with socket
     state.add_connected_client(*addr, user_id)?;
@@ -78,13 +75,13 @@ pub async fn register_addr(
             while let Ok(msg) = channel_reciever_handle.recv().await {
                 let message_to_send_to_client = match msg.clone() {
                     BroadcastMessage::NewMessage(message) => {
-                        ClientMessageOut::MessageRecieved(message)
+                        ServerMessageOut::MessageRecieved(message)
                     }
                     BroadcastMessage::DeliveredUpdate(delivered_update) => {
-                        ClientMessageOut::MessageDelivered(delivered_update)
+                        ServerMessageOut::MessageDelivered(delivered_update)
                     }
                     BroadcastMessage::SeenUpdate(seen_update) => {
-                        ClientMessageOut::MessageSeen(seen_update)
+                        ServerMessageOut::MessageSeen(seen_update)
                     }
                     BroadcastMessage::NewMessageRequest(message_req) => {
                         println!("New message request being sent to individual users. This is prohibited. Aborting client sender thread. Message attempting to be sent: {:?}", message_req);

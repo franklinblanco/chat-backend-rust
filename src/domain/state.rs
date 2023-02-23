@@ -4,7 +4,7 @@ use chat_types::domain::{chat_message::BroadcastMessage, chat_message_update::Ch
 use sqlx::MySqlPool;
 use tokio::sync::broadcast::{self, Receiver, Sender};
 
-use crate::net::error::{SocketError, MUTEX_LOCK_ERROR_MESSAGE};
+use chat_types::domain::error::{MUTEX_LOCK_ERROR_MESSAGE, SocketError};
 
 use super::chat_room_channel::ChatRoomChannel;
 

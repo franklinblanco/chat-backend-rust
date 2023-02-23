@@ -1,7 +1,7 @@
 use std::{net::SocketAddr, sync::Arc};
 
 use axum::extract::ws::{Message, WebSocket};
-use chat_types::domain::chat_message::BroadcastMessage;
+use chat_types::{domain::chat_message::BroadcastMessage, dto::{server_in::ServerMessageIn, server_out::ServerMessageOut}};
 use futures::stream::SplitSink;
 use tokio::{sync::Mutex, task::JoinHandle};
 
@@ -42,24 +42,24 @@ pub async fn handle_message(
     };
 
     match client_message_in {
-        super::recv::ClientMessageIn::Login(_) => {
+        ServerMessageIn::Login(_) => {
             send_message(
                 sender,
-                super::send::ClientMessageOut::Error("Already Logged in!".into()),
+                ServerMessageOut::Error("Already Logged in!".into()),
             )
             .await?
         }
-        super::recv::ClientMessageIn::Logout => todo!(),
-        super::recv::ClientMessageIn::SeeMessages(seen_messages) => {
+        ServerMessageIn::Logout => todo!(),
+        ServerMessageIn::SeeMessages(seen_messages) => {
             see_messages(&state, &user_id, seen_messages).await?;
         }
-        super::recv::ClientMessageIn::SendMessage(message) => {
+        ServerMessageIn::SendMessage(message) => {
             user_send_message(state, user_id, BroadcastMessage::NewMessageRequest(message)).await?;
-            send_message(sender, super::send::ClientMessageOut::MessageSent).await?;
+            send_message(sender, ServerMessageOut::MessageSent).await?;
         }
-        super::recv::ClientMessageIn::JoinGroup() => todo!(),
-        super::recv::ClientMessageIn::LeaveGroup() => todo!(),
-        super::recv::ClientMessageIn::FetchMessages() => todo!(),
+        ServerMessageIn::JoinGroup() => todo!(),
+        ServerMessageIn::LeaveGroup() => todo!(),
+        ServerMessageIn::FetchMessages() => todo!(),
     };
 
     Ok(())
