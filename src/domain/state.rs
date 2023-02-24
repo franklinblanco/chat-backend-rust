@@ -166,7 +166,8 @@ impl AppState {
             };
             room.participants.remove(user_id_pos_to_remove);
             if room.participants.is_empty() {
-                user_rooms.remove(&room_id);
+                // TODO: Fix this bug, remove the room instead of the 
+                chat_room_channels.remove(&room_id);
             }
         }
         Ok(())
