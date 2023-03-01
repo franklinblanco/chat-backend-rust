@@ -24,7 +24,7 @@
                 const addr_for_client = window.location.href.substring(6);
                 console.log(addr_for_client)
                 const websocket = new WebSocket("ws://" + addr_for_client +"websocket");
-                let login_body = {};
+                var login_body = {};
                 if (username.value === "1") {
                     login_body = {"id": "1", "token": "EQfXEWahJqDKWtGMCrFmeK1RME+hETYpezmj8qiguE+5vfJVE8p9TMPwa4m48IO7wA6E3ffkNEIc7Jushuze7A=="}
                 } else if (username.value === "2") {

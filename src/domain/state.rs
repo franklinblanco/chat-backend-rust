@@ -73,7 +73,7 @@ impl AppState {
     ) -> Result<Receiver<BroadcastMessage>, Box<dyn std::error::Error + Send + Sync>> {
         let mut chat_rooms = self.rooms.lock().expect(MUTEX_LOCK_ERROR_MESSAGE);
         let (tx, rx) = broadcast::channel(MAX_CONCURRENT_ROOM_CAPACITY);
-        let chat_room_channel = ChatRoomChannel::new(tx, vec![], room_id);
+        let chat_room_channel = ChatRoomChannel::new(tx, vec![*user_id], room_id);
 
         match chat_rooms.get_mut (&room_id) {
             Some(existing_chat_room) => {
@@ -166,7 +166,6 @@ impl AppState {
             };
             room.participants.remove(user_id_pos_to_remove);
             if room.participants.is_empty() {
-                // TODO: Fix this bug, remove the room instead of the 
                 chat_room_channels.remove(&room_id);
             }
         }

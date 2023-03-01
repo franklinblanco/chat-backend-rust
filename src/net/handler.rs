@@ -22,6 +22,7 @@ pub async fn handle_message(
     addr: SocketAddr,
     all_send_tasks: &mut Vec<JoinHandle<()>>,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    
     let client_message_in = match interpret_message(message) {
         Ok(res) => res,
         Err(err) => return Err(err),
@@ -49,7 +50,7 @@ pub async fn handle_message(
             )
             .await?
         }
-        ServerMessageIn::Logout => todo!(),
+        ServerMessageIn::Logout => return Ok(()), //TODO: Make this method, should be easy, just disconnect client?
         ServerMessageIn::SeeMessages(seen_messages) => {
             see_messages(&state, &user_id, seen_messages).await?;
         }
@@ -57,8 +58,6 @@ pub async fn handle_message(
             user_send_message(state, user_id, BroadcastMessage::NewMessageRequest(message)).await?;
             send_message(sender, ServerMessageOut::MessageSent).await?;
         }
-        ServerMessageIn::JoinGroup() => todo!(),
-        ServerMessageIn::LeaveGroup() => todo!(),
         ServerMessageIn::FetchMessages() => todo!(),
     };
 
@@ -74,7 +73,10 @@ pub async fn disconnect_client(
     for send_task in send_tasks {
         send_task.abort();
     }
-    let user_id = state.remove_connected_client(addr)?;
-    state.remove_user_from_all_groups(&user_id)?;
+    match state.remove_connected_client(addr) {
+        Ok(user_id) => state.remove_user_from_all_groups(&user_id)?,
+        Err(error) => return Err(error),
+    };
+    
     Ok(())
 }

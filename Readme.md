@@ -3,6 +3,10 @@ by Franklin Blanco
 
 This is a backend for all future applications that require a chat. Built with rust
 
+### Todo's
+- Plan how HTTP and websockets will interface together? [ ]
+- Think about the amount of threads you're spawning [ ]
+
 ### Ideal scenario
 - Player requests to open a DM with another player or a League gets created 
 - Player gets assigned to chat room with the help of user-svc
